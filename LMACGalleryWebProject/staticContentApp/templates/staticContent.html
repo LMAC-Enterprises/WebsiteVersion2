@@ -1,0 +1,7 @@
+{% extends "overall.html" %}
+{% block content %}
+<div class="staticContent">
+    <h1>{{content.title}}</h1>
+    {{content.bodyRendered|safe}}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% for image in content.images %}
+<div class="lil-gallery-image-card">
+    <div class="card-preview">
+        <a class="lil-gallery-image-link" href="/lil-gallery-image/{{image.imageId}}" data-image-id="{{image.imageId}}">
+            <img src="https://images.hive.blog/320x0/{{image.imageUrl}}" alt="LIL image" />
+        </a>
+    </div>
+    <div class="card-footer">
+        {{image.ratingScore}}
+        <ul>
+        {% for tag in image.tags %}
+            <li><a href="/lil-gallery/{{tag}}">#{{tag}}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+

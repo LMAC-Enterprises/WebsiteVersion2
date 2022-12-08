@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/overall.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mediaqueries.css' %}">
+    <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
+    <script type="application/javascript" src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.balloon.min.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/overall.js' %}"></script>
+</head>
+<body>
+    <nav class="top-menu">
+
+            <div class="logo">
+                <a href="/" title="Home">LMAC</a>
+            </div>
+
+            <div class="desktop-menu">
+                <ul class="navigation">
+                    {% for menuItem in overall.mainMenu %}
+                    <li><a class="{{menuItem.class}}" href="{{menuItem.path}}">{{menuItem.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="mobile-menu">
+                <button id="burger-menu-button" class="burger-menu-button">&#x2630;</button>
+            </div>
+
+    </nav>
+    <nav class="mobile-menu-items">
+        <ul class="navigation">
+            {% for menuItem in overall.mainMenu %}
+            <li><a class="{{menuItem.class}}" href="{{menuItem.path}}">{{menuItem.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <div id="error-container" class="error-container content-wrapper"{% if not overall.errorMessage %} style="display: none;"{% endif %}>{{overall.errorMessage}}</div>
+
+    <article class="content-wrapper">
+    {% block content %}{% endblock %}
+    </article>
+
+    <footer>
+        <ul class="navigation"><li class="first leaf footerMenuItemCommunity"><a href="https://peakd.com/c/hive-174695/created" target="_blank">LMAC Community</a></li>
+            <li class="leaf footerMenuItemHive"><a href="https://hive.io/" target="_blank">Hive Network</a></li>
+            <li class="leaf footerMenuItemHive"><a href="https://hiveonboard.com?ref=lmac" target="_blank">Create a HIVE account</a></li>
+            <li class="last leaf footerMenuItemContact"><a href="https://discord.gg/6wSVQsZpuN" target="_blank">Contact</a></li>
+        </ul>
+    </footer>
+    <div id="dapp-selection-wrapper">
+        <div id="dapp-link-box-toggler">
+            <a href="#"><img src="/static/images/icons/HiveLogo.png" /></a>
+        </div>
+        <div id="dapp-links-wrapper" style="display: none;">
+            <h1>Open links in&hellip;</h1>
+            <ul>
+                <li class="dapp-icon dapp-type-peakd active" data-prefix="https://peakd.com/">PeakD</li>
+                <li class="dapp-icon dapp-type-hive-blog" data-prefix="https://hive.blog/">Hive.blog</li>
+                <li class="dapp-icon dapp-type-ecency" data-prefix="https://ecency.com/">Ecency</li>
+            </ul>
+        </div>
+    </div>
+    <div id="modal-wrapper" class="modal-wrapper">
+        <div class="modal-container">
+            <span class="close-button">&times;</span>
+            <h1></h1>
+            <div class="modal-content"></div>
+        </div>
+    </div>
+    <div id="load-indicator" class="load-indicator"><img src="{% static 'images/loadIndicator.gif' %}" /></div>
+</body>
+</html>

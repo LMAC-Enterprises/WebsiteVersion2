@@ -1,0 +1,92 @@
+.lil-gallery-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.lil-gallery-image-card {
+    flex: 1 1 calc((100% / 4) - 2rem);
+    padding: 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    height: fit-content;
+}
+
+.lil-gallery-image-card .card-preview {
+    background-image: url(/static/images/backgroundGrid.png);
+    background-repeat: repeat;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    text-align: center;
+}
+
+.lil-gallery-image-card .card-preview img {
+    width: auto;
+}
+
+.lil-gallery-image-card ul, li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    line-height: 25px;
+    font-size: 1em;
+}
+
+.lil-gallery-image-card li {
+    display: inline;
+}
+
+.lil-gallery-image-card > .card-footer {
+    padding: 5px;
+    overflow: hidden;
+    position: relative;
+    height: 25px;
+    bottom: 25px;
+    margin-bottom: -25px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #F5EBE0;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    font-weight: bold;
+}
+
+.lil-gallery-image-card > .card-footer a {
+    text-decoration: none;
+    color: #F5EBE0;
+}
+
+.lil-gallery-form-container {
+    margin-bottom: 25px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    width: fit-content;
+    padding: 0.5em;
+    background-color: #d5e9d9;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    font-size: 0.92em;
+}
+
+.lil-gallery-form-container input[type="search"] {
+    width: 33vw;
+    min-width: 150px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    border-style: hidden;
+    border-width: 0;
+    padding: 2px;
+    color: #392a28;
+    line-height: 25px;
+    height: 25px;
+}
+
+.lil-gallery-form-container input[type="submit"] {
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    border-style: hidden;
+    border-width: 0;
+    padding: 5px;
+    background-color: #F5EBE0;
+    color: #392a28;
+    height: 25px;
+}

@@ -1,0 +1,21 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lilGallery.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/lilGalleryImage.css' %}">
+<script type="text/javascript" src="{% static 'js/lilGallery.js' %}"></script>
+<div class="lil-gallery-form-container">
+    <form id="lil-gallery-form" action="#" method="GET">
+        {% csrf_token %}
+        <input type="search" placeholder="search term" id="lil-gallery-form-search" value="{{searchTerms}}" results="5"/>
+        <input type="submit" value="Search" />
+    </form>
+</div>
+<div class="content-header"><button id="lil-gallery-load-previous" class="action-button">Previous</button></div>
+<div id="lil-gallery-content" class="lil-gallery-content">
+    {% include "lilGalleryAjax.html" %}
+</div>
+<div class="content-footer">
+    <button id="lil-gallery-load-more" class="action-button">Load more</button>
+</div>
+{% endblock %}

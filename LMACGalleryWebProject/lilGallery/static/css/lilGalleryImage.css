@@ -1,0 +1,147 @@
+#lil-gallery-image-file > .image-wrapper {
+    background-image: url(/static/images/backgroundGrid.png);
+    background-repeat: repeat;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+#lil-gallery-image-file > .image-wrapper > .image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#lil-gallery-image-file > .image-wrapper > .image > img {
+    visibility: hidden;
+}
+
+#lil-gallery-image-file > .image-wrapper > .image > img,
+#lil-gallery-image-file > .image-wrapper > .image {
+    width: 100%;
+    height: auto;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    max-height: 50vh;
+}
+
+#lil-gallery-image-file > .info-wrapper {
+    overflow: hidden;
+    padding: 5px;
+}
+
+#lil-gallery-image-file > .info-wrapper > ul.tags {
+    margin: 15px 0 0 0;
+}
+
+#lil-gallery-image-file > .info-wrapper > ul.tags,
+#lil-gallery-image-file > .info-wrapper > ul.tags > li {
+    list-style-type: none;
+    font-size: 1.125em;
+    padding: 0;
+}
+
+#lil-gallery-image-file > .info-wrapper > ul.tags > li {
+    display: inline-table;
+    margin: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #d5e9d9;
+    padding: 5px 15px 5px 15px;
+}
+
+#lil-gallery-image-file > .info-wrapper > ul.tags > li > a {
+    color: #392a28;
+    text-decoration: none;
+}
+
+#lil-gallery-image-file > .info-wrapper > span > a {
+    color: #392a28;
+}
+
+#lil-gallery-image-file > .info-wrapper .download-button {
+    display: block;
+    margin: 15px 0 15px 0;
+    background-color: #d5e9e6;
+    padding: 5px 15px 5px 15px;
+    border: unset;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 1.75em;
+    color: #392a28;
+    cursor: pointer;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+}
+#lil-gallery-image-file > .info-wrapper .download-button:hover {
+    background-color: #F5EBE0;
+    box-shadow: 0 1px 5px 1px rgb(51 51 51 / 50%);
+}
+
+#lil-gallery-image-file hr {
+    border: 1px solid #d5e9d9;
+}
+
+#lil-gallery-image-download-modal-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: 1;
+
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    z-index: 50;
+}
+
+#lil-gallery-image-download-modal-wrapper > .modal-content {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 1rem 1.5rem;
+    width: 85%;
+    max-width: 320px;
+    background-color: #FEFCF3;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    max-height: 90%;
+}
+
+#lil-gallery-image-download-modal-wrapper textarea,
+#lil-gallery-image-download-modal-wrapper .action-button {
+    display: block;
+    width: 100%;
+}
+
+#lil-gallery-image-download-modal-wrapper .action-button {
+    text-align: center;
+}
+
+#lil-gallery-image-download-modal-wrapper textarea {
+    height: 80px;
+    text-align: left;
+}
+
+#lil-gallery-image-download-modal-wrapper .download-button {
+    display: block;
+    margin: 15px 0 15px 0;
+    background-color: #d5e9e6;
+    padding: 5px 15px 5px 15px;
+    border: unset;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 1.75em;
+    color: #392a28;
+    cursor: pointer;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    text-align: center;
+}
+
+#lil-gallery-image-download-modal-wrapper .download-button:hover {
+    background-color: #F5EBE0;
+    box-shadow: 0 1px 5px 1px rgb(51 51 51 / 50%);
+}

@@ -1,0 +1,25 @@
+@media (max-width: 600px) {
+    .logo > a {
+        background-size: 70vw;
+        width: 70vw;
+    }
+}
+
+@media (max-width: 799px) {
+    .mobile-menu {
+        display: block;
+    }
+    .desktop-menu {
+        display: none;
+    }
+}
+
+@media (min-width: 800px) {
+    .mobile-menu-items.active,
+    .mobile-menu {
+        display: none;
+    }
+    .desktop-menu {
+        display: block;
+    }
+}

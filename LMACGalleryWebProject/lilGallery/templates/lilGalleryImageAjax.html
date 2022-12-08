@@ -1,0 +1,34 @@
+<div id="lil-gallery-image-file">
+    <div class="file-header">
+        <h1>{{image.title}}</h1>
+    </div>
+    <div class="image-wrapper">
+        <div class="image" style="background-image: url('{{image.url}}');">
+            <img src="{{image.url}}"/>
+        </div>
+    </div>
+    <div class="info-wrapper">
+        <span>By <a class="dynamic-dapp-link" data-path="@{{image.author}}" href="https://peakd.com/@{{image.author}}" title="Open Hive profile">@{{image.author}}</a>. Click <a class="dynamic-dapp-link" data-path="@{{image.author}}/{{image.permlink}}" href="https://peakd.com/@{{image.author}}/{{image.permlink}}" title="Post">here</a> to open the contribution post on Hive.</span>
+        <span>Click <a href="/lil-gallery/@{{image.author}}">here</a> to discover all images contributed by @{{image.author}}.</span>
+        <button id="lil-gallery-image-download-button" class="download-button" data-url="{{image.url}}">Download &#11123;</button>
+        <hr/>
+        <ul class="tags">
+        {% for tag in image.tags %}
+            <li><a href="/lil-gallery/{{tag}}">#{{tag}}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<div id="lil-gallery-image-download-modal-wrapper">
+    <div class="modal-content">
+        <span id="lil-gallery-image-download-close-button" class="close-button">&times;</span>
+        <h1>Download image</h1>
+        <p>If using this image, please add @{{image.author}} as 2% beneficiary to your Hive post. Also include the #lil tag to help our curators finding your post. Thank you!</p>
+        <em>Please add this Markdown snippet to your Hive post to indicate where you got the image from.</em>
+        <button id="lil-gallery-image-copy-snipped-button" class="action-button">Copy to clipboard</button>
+        <textarea readonly>
+            [<center>![lil_image_preview.jpg](https://images.hive.blog/300x0/https://files.peakd.com/file/peakd-hive/eve66/23swfvkoJgsUVvdE4RgHWdrNpDcJZrfHDMemcKdxAbT8whaoYXM6FqrPiSqthAx6sCEs6.png)<br/>Contributed to the #LIL by @eve66.</center>](http://lmac.gallery/lil-gallery-image/5829)
+        </textarea>
+        <a id="lil-gallery-image-final-download-button" class="download-button" download="lil-{{image.author}}-{{image.imageId}}" href="{{image.url}}" target="_blank" rel="external">Download &#11123;</a>
+    </div>
+</div>
