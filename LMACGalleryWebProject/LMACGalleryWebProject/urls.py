@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from lilGallery.views import lilGalleryMainAppView, lilGalleryAjaxAppView, lilGalleryImageMainAppView, \
-    lilGalleryImageAjaxAppView
+    lilGalleryImageAjaxAppView, lilGalleryAjaxCommand, lilGalleryTagsView, lilGalleryAllTagsView
 from staticContentApp.views import staticContentAppViewRouter
 
 urlpatterns = [
@@ -25,9 +25,12 @@ urlpatterns = [
     path('lil-gallery-ajax-image', lilGalleryImageAjaxAppView),
     path('lil-gallery-image/<int:imageId>', lilGalleryImageMainAppView),
     path('lil-gallery-ajax', lilGalleryAjaxAppView),
+    path('lil-gallery-ajax-command', lilGalleryAjaxCommand),
     path('lil-gallery/', lilGalleryMainAppView),
     path('lil-gallery/<str:searchTerms>', lilGalleryMainAppView),
     path('lil-gallery/<str:searchTerms>/<int:page>', lilGalleryMainAppView),
+    path('lil-gallery-tags', lilGalleryTagsView),
+    path('lil-gallery-tags/all', lilGalleryAllTagsView),
     path('page/<slug:contentId>', staticContentAppViewRouter),
     path('home', staticContentAppViewRouter),
     path('', staticContentAppViewRouter)

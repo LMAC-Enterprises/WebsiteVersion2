@@ -10,12 +10,25 @@ class LILGalleryController extends SubViewController {
         this.#initPagination();
     }
 
+    #processSearchTerms(searchTerms, breakDown = false) {
+        searchTerms = searchTerms.trim().toLowerCase();
+
+        if (searchTerms.length == 0) {
+            return breakDown ? ['all'] : 'all';
+        }
+
+        return breakDown ?
+                searchTerms.replace(/[^0-9a-z\-, ]/gi, '').split(/[ ,\-\s]+/) :
+                searchTerms.replace(/[^0-9a-z\-, ]/gi, '');
+    }
+
     init(overallController) {
         super.init(overallViewController);
         this.#initPagination();
         this.#initSearchForm();
         this.#initOpenImageHandling();
         this.#initDownloadImageHandling();
+        this.#initFiveStarRating();
     }
 
     updateUrl() {
@@ -26,7 +39,7 @@ class LILGalleryController extends SubViewController {
         var self = this;
         e.preventDefault();
 
-        this.currentSearchTerms = $('#lil-gallery-form-search').val();
+        this.currentSearchTerms = this.#processSearchTerms($('#lil-gallery-form-search').val());
         this.currentPage = 1;
 
         this.overallController.loadHtmlInto(
@@ -83,14 +96,6 @@ class LILGalleryController extends SubViewController {
 
     }
 
-    #processSearchTerms(searchTerms) {
-        processedSearchTerms = [];
-
-
-
-        return processedSearchTerms;
-    }
-
     #initPagination() {
         var self = this;
         $('#lil-gallery-load-more').click(function(e) { return self.onLoadButtonClicked(e, 1);});
@@ -130,6 +135,10 @@ class LILGalleryController extends SubViewController {
             $('#lil-gallery-image-download-modal-wrapper').show();
         });
 
+        $(document).on('click', '#lil-gallery-image-final-download-button', function(e) {
+            $('#lil-gallery-image-download-modal-wrapper').hide();
+        });
+
         $(document).on('click', '#lil-gallery-image-copy-snipped-button', function(e) {
             navigator.clipboard.writeText(
                 $('#lil-gallery-image-download-modal-wrapper textarea').text()
@@ -146,6 +155,38 @@ class LILGalleryController extends SubViewController {
                     'Wasn\'t able to copy snippet to clipboard.'
                 );
               }
+            );
+        });
+    }
+
+    #initFiveStarRating() {
+        var self = this;
+
+        $(document).on('click', '.lil-rating-star', function(e) {
+            var imageId = $(this).data('image-id');
+            var ratingRate = $(this).data('rating-rate');
+            var starList = $(this).parents('ul.lil-fivestar-list:first');
+
+            self.overallController.sendAjaxCommandRequest(
+                '/lil-gallery-ajax-command',
+                'doFiveStarVote',
+                {
+                    'imageId': imageId,
+                    'ratingRate': ratingRate
+                },
+                function(status, receivedData) {
+                    starList.children('li').each(function(index, element){
+                        var starElement = $('span', element);
+                        if (starElement.data('rating-rate') <= ratingRate) {
+                            starElement.html('&#128420;'); // SET
+                        }else{
+                            starElement.html('&#9825;'); // UNSET
+                        }
+                    })
+                },
+                function(status, responseText) {
+                    self.overallController.showError(responseText);
+                }
             );
         });
     }

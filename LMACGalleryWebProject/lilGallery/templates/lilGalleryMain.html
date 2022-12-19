@@ -11,6 +11,9 @@
         <input type="submit" value="Search" />
     </form>
 </div>
+<div id="lil-search-result-info">
+    Found <span id="lil-search-result-info-number">{{content.imagesTotal}}</span> images.
+</div>
 <div class="content-header"><button id="lil-gallery-load-previous" class="action-button">Previous</button></div>
 <div id="lil-gallery-content" class="lil-gallery-content">
     {% include "lilGalleryAjax.html" %}

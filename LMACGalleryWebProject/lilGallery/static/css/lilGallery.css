@@ -11,6 +11,7 @@
     border-radius: 5px 5px 5px 5px;
     box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
     height: fit-content;
+    position: relative;
 }
 
 .lil-gallery-image-card .card-preview {
@@ -56,6 +57,27 @@
     color: #F5EBE0;
 }
 
+.lil-gallery-image-card > .card-header {
+    padding: 5px;
+    overflow: hidden;
+    position:absolute;
+    right:0px;
+    top:0px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #F5EBE0;
+    -webkit-border-radius: 5px 5px 0 5px;
+    border-radius: 5px 5px 0 5px;
+    font-weight: bold;
+}
+
+.lil-gallery-image-card > .card-header .lil-rating-star {
+    cursor: pointer;
+}
+
+.lil-gallery-image-card > .card-header .lil-rating-star:hover {
+    text-decoration: underline;
+}
+
 .lil-gallery-form-container {
     margin-bottom: 25px;
     -webkit-border-radius: 5px 5px 5px 5px;
@@ -78,6 +100,7 @@
     color: #392a28;
     line-height: 25px;
     height: 25px;
+    background-color: #FEFCF3;
 }
 
 .lil-gallery-form-container input[type="submit"] {
@@ -89,4 +112,9 @@
     background-color: #F5EBE0;
     color: #392a28;
     height: 25px;
+}
+
+.lil-gallery-form-container input[type="submit"]:focus,
+.lil-gallery-form-container input[type="submit"]:hover {
+    background-color: #e4f5e0;
 }

@@ -1,3 +1,4 @@
+import random
 import re
 
 from django.core.cache import cache
@@ -27,12 +28,37 @@ class LILRatingsModel(models.Model):
     class Meta:
         db_table = 'lmacg_ratings'
         managed = False
+        permissions = [
+            (
+                "rate_image",
+                "Allowed to rate an image."
+            )
+        ]
 
     ratingid = models.IntegerField(primary_key=True)
-    imageid = models.ForeignKey(
-        'LILImagesModel', default=1, verbose_name="Ratings", on_delete=models.SET_DEFAULT)
+    imageid = models.IntegerField()
     score = models.IntegerField()
     uid = models.IntegerField()
+
+    @staticmethod
+    def rateImage(imageId: int, ratingRate: int, user) -> bool:
+
+        if not user.is_authentificated:
+            return False
+
+        defaults = {'score': ratingRate}
+        try:
+            obj = LILRatingsModel.objects.using(LILImagesModel.DJANGO_DATABASE_ID).get(imageid=imageId, uid=user.id)
+            for key, value in defaults.items():
+                setattr(obj, key, value)
+            obj.save()
+            return True
+        except LILRatingsModel.DoesNotExist:
+            new_values = {'imageid': imageId, 'score': ratingRate, 'uid': user.id}
+            new_values.update(defaults)
+            obj = LILRatingsModel(**new_values)
+            obj.save(using=LILImagesModel.DJANGO_DATABASE_ID)
+            return True
 
 
 # Create your models here.
@@ -111,7 +137,15 @@ class LILImagesModel(models.Model):
             else:
                 return 'lil_' + defaultSID
         else:
-            inputStr = LILImagesModel.sanitizeSearchTermString(inputStr)
+            return 'lil_' + LILImagesModel.sanitizeSearchTermString(inputStr)
+
+    @staticmethod
+    def _paginateResult(result, page):
+        pageOffset = (page - 1) * LILImagesModel.MAX_IMAGES_PER_PAGE
+        if pageOffset > len(result):
+            return []
+        return result[pageOffset:pageOffset + LILImagesModel.MAX_IMAGES_PER_PAGE]
+
 
     @staticmethod
     def loadImages(searchTerms: str, page: int):
@@ -120,7 +154,7 @@ class LILImagesModel(models.Model):
 
         cached = cache.get(sid)
         if cached is not None:
-            return cached
+            return LILImagesModel._paginateResult(cached, page), len(cached)
 
         if len(parsedSearchTerms) == 0 or parsedSearchTerms[0] == 'all':
             parsedSearchTerms = []
@@ -129,7 +163,7 @@ class LILImagesModel(models.Model):
                 'WHERE lr.imageid=li.imageid) AS ratingscore FROM images AS li '
         if len(parsedSearchTerms) > 0:
             query += 'WHERE MATCH(li.tags) AGAINST(%s IN BOOLEAN MODE) OR li.author=%s '
-        query += 'ORDER BY ratingscore DESC LIMIT %s, %s'
+        query += 'ORDER BY ratingscore DESC'
         """query = query.format(
                 author=LILImagesModel.sanitizeSearchTermString(searchTerms),
                 searchTerms=' '.join(f'+{w}' for w in parsedSearchTerms),
@@ -141,19 +175,15 @@ class LILImagesModel(models.Model):
                 query,
                 [
                     ' '.join(f'+{w}' for w in parsedSearchTerms),
-                    LILImagesModel.sanitizeSearchTermString(searchTerms),
-                    (page - 1) * LILImagesModel.MAX_IMAGES_PER_PAGE,
-                    LILImagesModel.MAX_IMAGES_PER_PAGE
+                    LILImagesModel.sanitizeSearchTermString(searchTerms)
                 ]
             )
         else:
             images = LILImagesModel.objects.using(LILImagesModel.DJANGO_DATABASE_ID).raw(
-                query,
-                [
-                    (page - 1) * LILImagesModel.MAX_IMAGES_PER_PAGE,
-                    LILImagesModel.MAX_IMAGES_PER_PAGE
-                ]
+                query
             )
+
+        amountOfImage = len(images)
 
         imageList = []
         for image in images:
@@ -168,9 +198,11 @@ class LILImagesModel(models.Model):
                 }
             )
 
+        del images
+
         cache.set(sid, imageList)
 
-        return imageList
+        return LILImagesModel._paginateResult(imageList, page), amountOfImage
 
     @staticmethod
     def loadImageById(imageId: int):
@@ -184,3 +216,72 @@ class LILImagesModel(models.Model):
         return image
 
 
+class LILTagsModel(models.Model):
+    class Meta:
+        db_table = 'LMACGalleryTags'
+        managed = False
+
+    DJANGO_DATABASE_ID = 'lmacMysql'
+
+    tagText = models.CharField(max_length=512, primary_key=True)
+    hits = models.IntegerField()
+
+    @staticmethod
+    def makeWeightedTagList(tags: list) -> list:
+        weightedTags = []
+
+        mostHits = 0
+        for tag in tags:
+            if tag.hits > mostHits:
+                mostHits = tag.hits
+
+        for tag in tags:
+            tagInfo = {
+                'tagText': tag.tagText,
+                'hits': tag.hits,
+                'weight': int((100.0 / float(mostHits)) * float(tag.hits))
+            }
+            if tagInfo['weight'] >= 75.0:
+                tagInfo['class'] = 'top-1'
+            elif tagInfo['weight'] < 75.0 and tagInfo['weight'] > 50.0:
+                tagInfo['class'] = 'top-2'
+            elif tagInfo['weight'] <= 50.0 and tagInfo['weight'] > 25.0:
+                tagInfo['class'] = 'top-3'
+            else:
+                tagInfo['class'] = 'top-4'
+
+            weightedTags.append(
+                tagInfo
+            )
+
+        return weightedTags
+
+    @staticmethod
+    def loadAllTags(limit: int = 1000) -> list:
+
+        cached = cache.get('lil_gallery_tags_all')
+        if cached is not None:
+            return cached
+
+        tags = LILTagsModel.objects.using(LILTagsModel.DJANGO_DATABASE_ID).all().order_by('-hits')
+        weightedTags = LILTagsModel.makeWeightedTagList(tags)
+
+        cache.set('lil_gallery_tags_all', weightedTags)
+
+        return weightedTags
+
+    @staticmethod
+    def loadTopTags(limit: int = 100) -> list:
+
+        cached = cache.get('lil_gallery_tags')
+        if cached is not None:
+            return cached
+
+        tags = LILTagsModel.objects.using(LILTagsModel.DJANGO_DATABASE_ID).all().order_by('-hits')[:limit]
+        weightedTags = LILTagsModel.makeWeightedTagList(tags)
+
+        random.shuffle(weightedTags)
+
+        cache.set('lil_gallery_tags', weightedTags)
+
+        return weightedTags

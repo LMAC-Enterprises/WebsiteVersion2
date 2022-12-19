@@ -5,8 +5,16 @@
             <img src="https://images.hive.blog/320x0/{{image.imageUrl}}" alt="LIL image" />
         </a>
     </div>
+    {% if user.is_authenticated %}
+    <div class="card-header">
+        <ul class="lil-fivestar-list">
+            {% for i in "x"|ljust:"5" %}
+            <li><span class="lil-rating-star" data-image-id="{{image.imageId}}" data-rating-rate="{{forloop.counter}}">{% if forloop.counter <= image.ratingScore %}&#128420;{% else %}&#9825;{% endif %}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     <div class="card-footer">
-        {{image.ratingScore}}
         <ul>
         {% for tag in image.tags %}
             <li><a href="/lil-gallery/{{tag}}">#{{tag}}</a></li>

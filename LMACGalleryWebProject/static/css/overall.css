@@ -404,3 +404,45 @@ body > footer > ul.navigation > li > a {
     position: absolute;
     display: block;
 }
+
+.clearAll {
+    clear: both;
+}
+
+.tabs {
+    width: auto;
+    border-bottom: 1px solid #392a28;
+}
+
+.tabs > .tab {
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    display: inline-block;
+    background-color: #d5e9d9;
+    padding: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tabs > .tab:visited,
+.tabs > .tab:active {
+    color: #392a28;
+}
+
+.tabs > .tab:hover,
+.tabs > .tab.active {
+    background-color: #c3ffcf;
+}
+
+.tabs > .tab.active {
+    border-bottom: 1px solid #392a28;
+}
+
+.tabs-panel > .tab-site {
+    display: none;
+}
+
+.tabs-panel > .tab-site.active {
+    display: block;
+}

@@ -21,6 +21,7 @@ class OverallViewController {
         $(document).ready(function() {
             self.initBurgerMenu();
             self.initModal();
+            self.initTabs();
 
             for (const subViewController of self.subViewControllers) {
                 subViewController.init(self);
@@ -112,12 +113,49 @@ class OverallViewController {
         $('#modal-wrapper').hide();
     }
 
+    onTabClicked(element, updatePath = true) {
+        var tabsParent = element.parent('.tabs');
+        var forTabs = $('.tab-site', '#' + tabsParent.data('for'));
+
+        if (updatePath) {
+            this.updateUrlTo(element.data('path'));
+        }
+
+        $('.tab', tabsParent).each(function(index, tabElement) {
+            if (element.is(tabElement)) {
+                if (! $(tabElement).hasClass('active')) {
+                    $(tabElement).addClass('active');
+                    $('#' + $(tabElement).data('for')).addClass('active');
+                }
+            }else{
+                $(tabElement).removeClass('active');
+                $('#' + $(tabElement).data('for')).removeClass('active');
+            }
+        });
+    }
+
     initBurgerMenu() {
         $('#burger-menu-button').on('click', this.onBurgerMenuButtonClicked);
     }
 
     initModal() {
         $('.modal-container > .close-button').click(this.onModalCloseButtonClicked);
+    }
+
+    initTabs() {
+        var self = this;
+
+        $('.tabs > .tab').each(function(index, element) {
+            element = $(element);
+            if (window.location.pathname == element.data('path')) {
+                self.onTabClicked(element);
+            }
+        });
+        $('.tabs > .tab').click(function(clickEvent) {
+            clickEvent.preventDefault();
+            self.onTabClicked($(this));
+            return false;
+        });
     }
 
     startLoadingMode() {
@@ -181,6 +219,35 @@ class OverallViewController {
        );
     }
 
+    sendAjaxCommandRequest(path, command, parameters, doneCallback, failCallback) {
+        this.startLoadingMode();
+
+        var self = this;
+
+        var metaData = {
+            'csrfmiddlewaretoken': this.readCookie('csrftoken'),
+            'data': JSON.stringify({
+                'command': command,
+                'parameters': parameters
+            })
+        }
+
+        $.post(path, metaData)
+            .fail(function(jqXHRObject) {
+                self.endLoadingMode();
+                if (doneCallback != null) {
+                    doneCallback(jqXHRObject.status, jqXHRObject.responseText);
+                }
+            })
+            .done(function(receivedData) {
+                if (doneCallback != null) {
+                    doneCallback(200, receivedData);
+                }
+
+                self.endLoadingMode();
+                self.setDocumentDirty();
+        });
+    }
 }
 
 var overallViewController = new OverallViewController();
@@ -223,6 +290,7 @@ class DappLinkSelectorView extends SubViewController {
             $('.dapp-icon').removeClass('active');
             $(this).addClass('active');
             self.setPrefix($(this).data('prefix'));
+            $('#dapp-links-wrapper').toggle();
         });
 
         this.setPrefix(this.overallController.readCookie('hiveDappPrefix'), false);

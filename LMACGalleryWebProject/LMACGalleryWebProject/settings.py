@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'SECRET-KEY-HERE'
+SECRET_KEY = 'TOP SECRET'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -142,7 +142,7 @@ STATICFILES_DIRS = [
 MAIN_MENU = {
     'home': {'path': '/', 'title': 'Home'},
     'lil-gallery': {'path': '/lil-gallery', 'title': 'LIL Gallery'},
-    'lil-tags': {'path': '/lil-tags', 'title': 'LIL Tags'},
+    'lil-gallery-tags': {'path': '/lil-gallery-tags', 'title': 'LIL Tags'},
     'lmac-polls': {'path': '/lmac-polls', 'title': 'Polls'},
     'lmac-winners': {'path': '/lmac-winners', 'title': 'Winners'}
 }
