@@ -1,0 +1,111 @@
+ul.lil-tag-cloud > li > a > em {
+    font-size: 0.75em;
+    vertical-align: top;
+}
+
+ul.tx3-tag-cloud li a:hover {
+    color: #392a28 !important;
+}
+
+
+
+.lil-gallery-selectable-tag {
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #d5e9d9;
+    display: inline-block;
+    padding: 10px 5px 10px 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    color: #392a28;
+    cursor: pointer;
+}
+
+.lil-gallery-selectable-tag a,
+.lil-gallery-selectable-tag a:hover,
+.lil-gallery-selectable-tag a:visited {
+    color: #392a28;
+    text-decoration: none;
+}
+
+.lil-gallery-selectable-tag .hits {
+    font-size: 0.625em;
+    vertical-align: top;
+    margin-left: 2px;
+}
+
+.lil-gallery-selected-tag.top-1,
+.lil-gallery-selectable-tag.top-1 {
+    background-color: #ff8989;
+}
+
+.lil-gallery-selected-tag.top-2,
+.lil-gallery-selectable-tag.top-2 {
+    background-color: #ffe589;
+}
+
+.lil-gallery-selected-tag.top-3,
+.lil-gallery-selectable-tag.top-3 {
+    background-color: #c7ff89;
+}
+
+ul.tx3-tag-cloud > li.top-1 a {
+    color: #a52b2b;
+}
+
+ul.tx3-tag-cloud > li.top-2 a {
+    color: #a5802b;
+}
+
+ul.tx3-tag-cloud > li.top-3 a {
+    color: #86a52b;
+}
+
+#lil-gallery-selected-tags-wrapper {
+    display:flex;
+    flex-direction:row;
+    vertical-align: middle;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#lil-gallery-search-selected-tags-button {
+    flex-grow: 0;
+    border: unset;
+    -webkit-border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #F5EBE0;
+    cursor: pointer;
+}
+
+#lil-gallery-search-selected-tags-button:focus,
+#lil-gallery-search-selected-tags-button:hover {
+    background-color: #e4f5e0;
+}
+
+#lil-gallery-selected-tags {
+    -webkit-border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
+    border: 2px solid #392a28;
+    background-color: #FEFCF3;
+    height: 30px;
+    padding: 2px;
+    flex-grow: 1;
+    cursor: not-allowed;
+    overflow: hidden;
+}
+
+.lil-gallery-selected-tag {
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #d5e9d9;
+    display: inline-block;
+    padding: 8px 5px 8px 5px;
+    margin-right: 5px;
+    color: #392a28;
+    cursor: pointer;
+}
+
+#lil-gallery-tags-all-tab p {
+    font-size: 0.82em;
+}

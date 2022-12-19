@@ -1,0 +1,34 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'js/third-party/jqsctc/tx3-tag-cloud.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/lilGalleryTags.css' %}">
+<script type="text/javascript" src="{% static 'js/third-party/jqsctc/jquery.tx3-tag-cloud.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lilGalleryTags.js' %}"></script>
+<div class="tabs" data-for="lil-gallery-tags-tab-panel">
+    <a href="/lil-gallery-tags" class="tab active" data-path="/lil-gallery-tags" data-for="lil-gallery-tags-top-tab">Top tags</a>
+    <a href="/lil-gallery-tags/all" class="tab" data-path="/lil-gallery-tags/all" data-for="lil-gallery-tags-all-tab">All tags</a>
+</div>
+<div id="lil-gallery-tags-tab-panel" class="tabs-panel">
+    <div id="lil-gallery-tags-top-tab" class="tab-site active">
+        <ul id="lil-top-tags-cloud" class="lil-tag-cloud">
+            {% for tag in topTags %}
+            <li class="{{tag.class}}" data-weight="{{ tag.weight }}"><a href="/lil-gallery/{{ tag.tagText }}">{{ tag.tagText }} <em>({{ tag.hits }})</em></a></li>
+            {% endfor %}
+        </ul>
+        <div class="clearAll"></div>
+    </div>
+    <div id="lil-gallery-tags-all-tab" class="tab-site">
+        <div id="lil-gallery-selected-tags-wrapper">
+            <div id="lil-gallery-selected-tags"></div>
+            <button id="lil-gallery-search-selected-tags-button">Search</button>
+        </div>
+        <div class="clearAll"></div>
+        <p>Here you can find a list of all keywords that have images in the gallery. You can also use this page as search input builder to search the gallery with a combination of up to 7 keywords.</p>
+        <p>Click on a keyword(tag) to select it. Click on a selected keyword to remove it from your list of selected keywords. Hit "Search" in order to search for the selected keywords in the gallery. It is like making a shopping list of image categories you wish to search.</p>
+        {% for tag in allTags %}
+        <div class="lil-gallery-selectable-tag {{tag.class}}" data-tag="{{tag.tagText}}"><a href="/lil-gallery/{{ tag.tagText }}">{{ tag.tagText }}</a><span class="hits">{{ tag.hits }}</span></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
