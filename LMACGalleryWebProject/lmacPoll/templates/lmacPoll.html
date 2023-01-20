@@ -1,0 +1,47 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lmacPoll.css' %}">
+<script type="text/javascript" src="{% static 'js/lmacPoll.js' %}"></script>
+<div id="lmac-poll-wrapper">
+    <div id="lmac-poll-hive">
+        <div class="not-logged-in">
+            <p>To be able to vote, you need to authenticate with your Hive account.</p>
+            <form id="hive-login-form">
+                {% csrf_token %}
+                <input type="text" value="" placeholder="your-hive-username" />
+                <button id="hive-login-keychain-login-button" type="button" value="keychain" disabled="disabled">Login via Keychain</button>
+            </form>
+        </div>
+        <div class="logged-in" style="display: none;">
+            Logged in as @<span class="username">unknown</span>. <a href="#" class="logout">Logout</a>.<br/>
+            <button id="hive-login-keychain-send-button" type="button" value="keychain">Send votes via Keychain</button>
+        </div>
+    </div>
+    <h1>{{poll.title}}</h1>
+    <div id="lmac-poll-container">
+        {% for option in poll.options %}
+        <div class="lmac-poll-option-card">
+            <div class="card-header">
+                <div class="left-aligned">
+                    <span class="vote-info" title="Votes/Rewards">{{option.votes}}/{{option.rewards}} HBD</span>
+                </div>
+                <div class="right-aligned author-row">by <a href="https://peakd.com/{{option.author}}" class="dynamic-dapp-link" data-path="{{option.author}}" title="Open profile on Hive">{{option.author}}</a>.
+                    <a href="https://peakd.com/" class="dynamic-dapp-link" data-path="{{option.post}}" target="_blank" title="Open post on Hive">
+                        <img src="{% static 'images/icons/HiveLogo.png' %}" />
+                    </a>
+                </div>
+            </div>
+            <div class="card-preview">
+                <img src="https://images.hive.blog/320x0/{{option.image}}" data-url="{{option.image}}" />
+            </div>
+            <div class="card-footer">
+                <span class="vote-label vote-percent-display">0</span>
+                <input class="vote-slider" type="range" min="0" max="100" step="1" value="0" data-comment-permlink="{{option.commentPermlinkReference}}" data-comment-author="{{option.commentAuthorReference}}"/>
+                <span class="vote-label">100</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

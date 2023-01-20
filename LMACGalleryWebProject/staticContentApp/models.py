@@ -5,6 +5,9 @@ from django.db import models
 
 # Create your models here.
 class StaticContentModel(models.Model):
+    class Meta:
+        verbose_name = 'Static content'
+
     content_id = models.CharField(max_length=48)
     is_enabled = models.BooleanField(default=True)
     is_home_page = models.BooleanField(default=False)

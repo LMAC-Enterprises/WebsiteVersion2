@@ -15,6 +15,18 @@ class LILGalleryTagsController extends SubViewController {
     }
 
     #initAllTags() {
+        $('#lil-gallery-search-selected-tags-button').click(function(clickEvent) {
+            var tags = [];
+
+            $("#lil-gallery-selected-tags div").each(function(index, element) {
+                tags.push(
+                    $(element).data('tag')
+                );
+            });
+
+            window.location.href = '/lil-gallery/' + tags.join(' ') + '?mode=mix';
+        });
+
         $('.lil-gallery-selectable-tag a').click(function(clickEvent){
             clickEvent.preventDefault();
             return true;

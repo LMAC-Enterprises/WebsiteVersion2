@@ -1,0 +1,88 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lmacPollCreatePoll.css' %}">
+<script type="text/javascript" src="{% static 'js/lmacPollCreatePoll.js' %}"></script>
+<div id="lmac-polls-create-poll-wrapper">
+    <h1>Create Final Poll post</h1>
+    <form id="lmac-polls-create-poll-form" action = "" method = "post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Post template</legend>
+            <select>
+            {% for template in postTemplates %}
+            <option value="{{template.name}}">{{template.name}}</option>
+            {% endfor %}
+            </select>
+            <button id="lmac-poll-post-load-template" data-template-name="{{template.name}}">Load selected template</button>
+            <button id="lmac-poll-post-delete-template" data-template-name="{{template.name}}">Delete current template</button>
+            <input id="lmac-poll-post-template-name" class="post-input-field" maxlength="256" type="text" value="{{postTemplate.name}}" placeholder="Template name" />
+            <button id="lmac-poll-post-add-template">Add/Save template</button>
+        </fieldset>
+        <fieldset>
+            <legend>Publishing</legend>
+            <div class="form-row">
+                <label class="fixed-span-150">Author:</label>
+                <input id="lmac-poll-post-author" class="post-input-field" type="text" value="lmac" placeholder="username" />
+            </div>
+            <div class="form-row">
+                <label class="fixed-span-150">Category/Community:</label>
+                <input id="lmac-poll-post-category" class="post-input-field" type="text" value="{{postTemplate.category}}" placeholder="Blog" />
+            </div>
+            <div class="form-row">
+                <label class="fixed-span-150">Permlink:</label>
+                <input id="lmac-poll-post-permlink" class="post-input-field" type="text" value="{{postTemplate.permlink}}" placeholder="lmac-round-XXX-the-final-poll-vote-for-your-favorite-entries-and-help-decide-who-the-winners-will-be-XXX-hive-to-be-awarded" />
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Content</legend>
+            <input id="lmac-poll-post-title" class="post-input-field" maxlength="256" type="text" value="{{postTemplate.title}}" placeholder="Post title" />
+            <textarea id="lmac-poll-post-body" class="post-markdown-textarea">{{postTemplate.body}}</textarea>
+            <em>Placeholders: {nominees} {author}</em>
+        </fieldset>
+        <fieldset>
+            <legend>Tags</legend>
+            <p>Space separated hashtags (without leading #). Example: art ocd creativecoin</p>
+            <input id="lmac-poll-post-tags" class="post-input-field" type="text" value="{{postTemplate.tags}}" maxlength="512" placeholder="Post title" />
+        </fieldset>
+        <fieldset id="lmac-poll-post-beneficiaries">
+            <legend>Beneficiaries</legend>
+            <div class="post-beneficiaries-wrapper">
+                {% for beneficiary in postTemplate.beneficiaries %}
+                <div class="post-beneficiary-container">
+                    <input class="post-beneficiary-username" type="text" value="{{beneficiary.username}}" placeholder="username" />
+                    <input class="post-beneficiary-percent" type="text" value="{{beneficiary.share}}" placeholder="0" />
+                    <label>&percnt;</label>
+                    <button class="delete-beneficiary">Delete</button>
+                </div>
+                {% endfor %}
+            </div>
+            <button id="lmac-poll-post-add-beneficiary">Add beneficiary</button>
+        </fieldset>
+        <fieldset id="lmac-poll-post-nominees">
+            <legend>Nominees</legend>
+            <p>All nominees added here are available in the {nominees} placeholder. Add this placeholder into the body of your post to get them formatted in standard way.</p>
+            <div class="post-nominees-wrapper">
+                <div class="post-nominee-container">
+                    <div class="form-row">
+                        <label class="fixed-span-150">Author username:</label>
+                        <input class="post-nominee-username" type="text" value="" maxlength="32" placeholder="username" />
+                    </div>
+                    <div class="form-row">
+                        <label class="fixed-span-150">Author-Permlink:</label>
+                        <input class="post-nominee-authorperm" type="text" value="" maxlength="256" placeholder="@author/permlink" />
+                    </div>
+                    <div class="form-row">
+                        <label class="fixed-span-150">Image url:</label>
+                        <input class="post-nominee-image-url" type="text" value="" maxlength="256" placeholder="https://images.hive.blog/p/HXJDKQWLJD.png" />
+                    </div>
+                    <button class="delete-nominee">Delete nominee</button>
+                </div>
+            </div>
+            <button id="lmac-poll-post-add-nominee">Add nominee</button>
+        </fieldset>
+        <button id="lmac-poll-post-export" title="Only the post body will be exported">Export post to clipboard</button>
+        <button id="lmac-poll-post-submit" disabled="disabled">Send via Keychain</button>
+    </form>
+</div>
+{% endblock %}

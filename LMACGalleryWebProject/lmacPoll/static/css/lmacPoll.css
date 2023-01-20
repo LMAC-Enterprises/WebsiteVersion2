@@ -1,0 +1,98 @@
+#lmac-poll-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+
+.lmac-poll-option-card {
+    flex: 1 1 calc((100% / 4) - 2rem);
+    padding: 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    height: fit-content;
+    position: relative;
+}
+
+.lmac-poll-option-card .card-preview {
+    background-image: url(/static/images/backgroundGrid.png);
+    background-repeat: repeat;
+    text-align: center;
+}
+
+.lmac-poll-option-card .card-preview img {
+    width: auto;
+}
+
+.lmac-poll-option-card > .card-footer {
+    padding: 5px;
+    background-color: #d5e9d9;
+    color: #392a28;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+
+.lmac-poll-option-card > .card-header {
+    padding: 5px;
+    background-color: #d5e9d9;
+    color: #392a28;
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+#lmac-poll-hive {
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #d5e9d9;
+    padding: 5px;
+    width: fit-content;
+}
+
+#lmac-poll-hive > #not-logged-in {
+
+}
+
+
+.lmac-poll-option-card > .card-footer > .vote-slider {
+    flex: 1 1 calc((100% / 4) - 2rem);
+    display: inline-block;
+    width: auto !important;
+}
+
+.lmac-poll-option-card > .card-footer > .vote-label {
+    margin-top: 5px;
+}
+
+.lmac-poll-option-card > .card-header > .left-aligned {
+    flex: 1 1 calc((100% / 4) - 2rem);
+}
+
+.lmac-poll-option-card > .card-header .vote-info,
+.lmac-poll-option-card > .card-header .author-row span,
+.lmac-poll-option-card > .card-header .author-row a {
+   display: inline-block;
+   line-height: 26px;
+   height: 26px;
+   vertical-align: middle;
+}
+
+.lmac-poll-option-card > .card-header .author-row a {
+    text-decoration: none;
+    color: #392a28;
+}
+
+.lmac-poll-option-card > .card-header .author-row a:hover {
+    text-decoration: underline;
+}
+
+.lmac-poll-option-card > .card-header .author-row {
+    font-weight: bold;
+}

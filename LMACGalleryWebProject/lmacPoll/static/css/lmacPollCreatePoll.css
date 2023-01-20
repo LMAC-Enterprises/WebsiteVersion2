@@ -1,0 +1,60 @@
+#lmac-polls-create-poll-form textarea {
+    width: 100%;
+    height: 300px;
+}
+
+#lmac-polls-create-poll-form input[maxlength="256"] {
+    width: 50%;
+}
+
+#lmac-polls-create-poll-form input[maxlength="512"] {
+    width: 100%;
+}
+
+#lmac-polls-create-poll-form textarea,
+#lmac-polls-create-poll-form input,
+#lmac-polls-create-poll-form label {
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+.post-nominee-container label,
+.post-nominee-container input {
+    display: inline-block;
+}
+
+.post-nominee-container,
+.post-beneficiary-container {
+    margin: 0 0 5px 0;
+    border: 1px solid #392a28;
+    padding: 5px;
+    background-color: #d5e9d9;
+    border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+}
+
+.post-beneficiary-container input,
+.post-beneficiary-container button,
+.post-beneficiary-container label {
+    display: inline !important;
+}
+
+.post-beneficiary-percent {
+    width: 80px;
+}
+
+#lmac-polls-create-poll-form fieldset {
+    border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    margin: 0 0 5px 0;
+}
+
+#lmac-polls-create-poll-form .form-row label,
+#lmac-polls-create-poll-form .form-row input,
+#lmac-polls-create-poll-form .form-row button {
+    display: inline-block;
+}
+
+#lmac-polls-create-poll-form .form-row label.fixed-span-150 {
+    width: 150px;
+}

@@ -18,8 +18,8 @@ class LILGalleryController extends SubViewController {
         }
 
         return breakDown ?
-                searchTerms.replace(/[^0-9a-z\-, ]/gi, '').split(/[ ,\-\s]+/) :
-                searchTerms.replace(/[^0-9a-z\-, ]/gi, '');
+                searchTerms.replace(/[^0-9a-z\-\., ]/gi, '').split(/[ ,\s]+/) :
+                searchTerms.replace(/[^0-9a-z\-\., ]/gi, '');
     }
 
     init(overallController) {
@@ -32,7 +32,11 @@ class LILGalleryController extends SubViewController {
     }
 
     updateUrl() {
-        window.history.pushState({}, '', '/lil-gallery/' + this.currentSearchTerms + '/' + this.currentPage);
+        var mixMode = '';
+        if ('mode' in $.QueryString) {
+            mixMode = '?mode=mix';
+        }
+        window.history.pushState({}, '', '/lil-gallery/' + this.currentSearchTerms + '/' + this.currentPage + mixMode);
     }
 
     onSearchFormSubmit(e) {
@@ -52,8 +56,9 @@ class LILGalleryController extends SubViewController {
             },
             false,
             20,
-            function() {
+            function(status, responseObject) {
                 self.updateUrl();
+               $('#lil-search-result-info-number').html(responseObject.getResponseHeader('lil-images-amount'));
             }
         );
 

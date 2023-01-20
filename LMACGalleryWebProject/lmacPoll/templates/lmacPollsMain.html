@@ -1,0 +1,19 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lmacPolls.css' %}">
+<div id="lmac-polls-wrapper">
+    <h1>Latest polls</h1>
+    <p>The list above contains the latest final polls for the LMAC contest.</p>
+    {% if polls %}
+    {% for poll in polls %}
+    <div class="lmac-poll">
+            <a href="/lmac-poll/{{poll.authorperm}}" title="Open Hive post">{{poll.title}}</a><br/>
+            <span class="lmac-poll-footer">{{poll.endsIn}} Open <a class="dynamic-dapp-link" data-path="{{poll.authorperm}}" href="https://peakd.com/{{poll.authorperm}}" title="Open Hive post">Hive post.</a></span>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No polls found.</p>
+    {% endif %}
+</div>
+{% endblock %}

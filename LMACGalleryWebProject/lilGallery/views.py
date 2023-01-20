@@ -13,8 +13,12 @@ def lilGalleryMainAppView(request: HttpRequest, searchTerms: str = '', page: int
     if page < 1:
         page = 1
 
+    andMode = True
+    if 'mode' in request.GET.keys() and request.GET.get('mode', ''):
+        andMode = False
+
     errorMessage = ''
-    images, amountOfImages = LILImagesModel.loadImages(searchTerms, page)
+    images, amountOfImages = LILImagesModel.loadImages(searchTerms, page, andMode)
     if len(images) == 0:
         errorMessage = 'Sorry, couldn\'t find any images matching your search query.'
 
@@ -43,9 +47,13 @@ def lilGalleryAjaxAppView(request: HttpRequest):
     if page < 1:
         page = 1
 
-    images, amountOfImages = LILImagesModel.loadImages(searchTerms, page)
+    andMode = True
+    if 'mode' in request.GET.keys() and request.GET.get('mode', ''):
+        andMode = False
+
+    images, amountOfImages = LILImagesModel.loadImages(searchTerms, page, andMode)
     if len(images) == 0:
-        return HttpResponse(status=404, content='Sorry, couldn\'t find any images matching your search query.')
+        return HttpResponse(status=404, content='Sorry, couldn\'t find any more images matching your search query.')
 
     response = render(request, 'lilGalleryAjax.html', {
         'content': {

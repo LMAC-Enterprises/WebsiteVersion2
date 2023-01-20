@@ -1,0 +1,6 @@
+#lmac-polls-wrapper .lmac-poll  {
+    background-image: url(/static/images/icons/poll.png);
+    background-repeat: no-repeat;
+    margin: 0 0 10px 0;
+    padding: 0 0 0 32px;
+}

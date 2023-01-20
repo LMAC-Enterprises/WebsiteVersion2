@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class LilgalleryConfig(AppConfig):
+class LmacpollConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'lilGallery'
-    verbose_name = 'LIL Gallery'
+    name = 'lmacPoll'
+    verbose_name = 'LMAC Poll'

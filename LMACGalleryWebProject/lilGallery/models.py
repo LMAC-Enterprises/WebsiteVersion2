@@ -43,7 +43,7 @@ class LILRatingsModel(models.Model):
     @staticmethod
     def rateImage(imageId: int, ratingRate: int, user) -> bool:
 
-        if not user.is_authentificated:
+        if not user.is_authenticated:
             return False
 
         defaults = {'score': ratingRate}
@@ -66,6 +66,7 @@ class LILImagesModel(models.Model):
     class Meta:
         db_table = 'images'
         managed = False
+        verbose_name = 'LIL Image'
 
     DJANGO_DATABASE_ID = 'lmacMysql'
 
@@ -92,7 +93,7 @@ class LILImagesModel(models.Model):
             searchTerms = searchTerms[:LILImagesModel.MAX_SEARCH_TERM_FRAGMENT_SIZE]
 
         return re.sub(
-            r'/[^A-Za-z0-9_\.\-]/',
+            r'/[^A-Za-z0-9_\-\.]/',
             '',
             searchTerms
         )
@@ -101,10 +102,11 @@ class LILImagesModel(models.Model):
     def parseSearchTerms(searchTerms: str, limit: int) -> list:
         parsedSearchTerms = []
         parsedSearchTermBuffer = ''
-        stoppers = ['\n', '\t', ' ', '.', ',', '-', '\r']
+        stoppers = ['\n', '\t', ' ', ',', '\r']
+        additionalAllowed = ['.', '-']
 
         for character in searchTerms:
-            if character.isalnum():
+            if character.isalnum() or character in additionalAllowed:
                 parsedSearchTermBuffer += character
             if character in stoppers:
                 bufferSize = len(parsedSearchTermBuffer)
@@ -148,9 +150,9 @@ class LILImagesModel(models.Model):
 
 
     @staticmethod
-    def loadImages(searchTerms: str, page: int):
+    def loadImages(searchTerms: str, page: int, andMode: bool = True):
         parsedSearchTerms = LILImagesModel.parseSearchTerms(searchTerms, LILImagesModel.MAX_SEARCH_TERMS_PER_QUERY)
-        sid = LILImagesModel.makeSID(parsedSearchTerms, 'empty')
+        sid = LILImagesModel.makeSID(parsedSearchTerms, 'empty') + ('_AND' if andMode else '_OR')
 
         cached = cache.get(sid)
         if cached is not None:
@@ -159,10 +161,14 @@ class LILImagesModel(models.Model):
         if len(parsedSearchTerms) == 0 or parsedSearchTerms[0] == 'all':
             parsedSearchTerms = []
 
+        andModeExpression = ''
+        if andMode:
+            andModeExpression = ' IN BOOLEAN MODE'
+
         query = 'SELECT imageid, title, tags, url, permlink, author, (SELECT AVG(score) FROM lmacg_ratings as lr ' \
                 'WHERE lr.imageid=li.imageid) AS ratingscore FROM images AS li '
         if len(parsedSearchTerms) > 0:
-            query += 'WHERE MATCH(li.tags) AGAINST(%s IN BOOLEAN MODE) OR li.author=%s '
+            query += 'WHERE MATCH(li.tags) AGAINST(%s' + andModeExpression + ') OR li.author=%s '
         query += 'ORDER BY ratingscore DESC'
         """query = query.format(
                 author=LILImagesModel.sanitizeSearchTermString(searchTerms),

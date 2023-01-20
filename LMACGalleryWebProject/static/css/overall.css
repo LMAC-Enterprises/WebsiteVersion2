@@ -176,9 +176,36 @@ body > footer > ul.navigation > li {
     padding: 0;
 }
 
+body > footer > ul.navigation > li {
+    vertical-align: middle;
+    display: inline-block;
+    line-height: 30px;
+}
+
 body > footer > ul.navigation > li > a {
     color: #392a28;
     text-decoration: none;
+}
+
+.footerMenuItemHive {
+	background-repeat: no-repeat;
+	background-image: url(/static/images/icons/HiveLogo.png);
+	min-height: 26x;
+	padding-left: 34px !important;
+}
+
+.footerMenuItemContact {
+	background-repeat: no-repeat;
+	background-image: url(/static/images/icons/Contact.png);
+	min-height: 26px;
+	padding-left: 30px !important;
+}
+
+.footerMenuItemCommunity {
+	background-repeat: no-repeat;
+	background-image: url(/static/images/icons/Community.png);
+	min-height: 26px;
+	padding-left: 32px !important;
 }
 
 .content-wrapper {

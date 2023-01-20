@@ -18,10 +18,17 @@ from django.urls import path
 
 from lilGallery.views import lilGalleryMainAppView, lilGalleryAjaxAppView, lilGalleryImageMainAppView, \
     lilGalleryImageAjaxAppView, lilGalleryAjaxCommand, lilGalleryTagsView, lilGalleryAllTagsView
+from lmacPoll.views import lmacPollMainAppView, lmacPollView, lmacPollCreatePollView
 from staticContentApp.views import staticContentAppViewRouter
+
+admin.site.site_header = 'LMAC Website Admin'
+admin.site.site_title = "LMAC"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('lmac-polls', lmacPollMainAppView),
+    path('lmac-polls-create', lmacPollCreatePollView),
+    path('lmac-poll/@<str:author>/<str:permlink>', lmacPollView),
     path('lil-gallery-ajax-image', lilGalleryImageAjaxAppView),
     path('lil-gallery-image/<int:imageId>', lilGalleryImageMainAppView),
     path('lil-gallery-ajax', lilGalleryAjaxAppView),

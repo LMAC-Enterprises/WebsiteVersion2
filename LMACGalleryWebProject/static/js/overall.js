@@ -1,3 +1,18 @@
+(function($) {
+    $.QueryString = (function(a) {
+        if (a == "") return {};
+        var b = {};
+        for (var i = 0; i < a.length; ++i)
+        {
+            var p=a[i].split('=');
+            if (p.length != 2) continue;
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+        return b;
+    })(window.location.search.substr(1).split('&'))
+})(jQuery);
+
+
 class SubViewController {
     overallViewController;
 
@@ -18,7 +33,7 @@ class OverallViewController {
 
     init() {
         var self = this;
-        $(document).ready(function() {
+        window.onload = () => {
             self.initBurgerMenu();
             self.initModal();
             self.initTabs();
@@ -26,7 +41,7 @@ class OverallViewController {
             for (const subViewController of self.subViewControllers) {
                 subViewController.init(self);
             }
-        });
+        };
     }
 
     constructor() {
@@ -49,6 +64,15 @@ class OverallViewController {
         $('#error-container').html(
             errorMessage
         ).show();
+        $([document.documentElement, document.body]).animate({
+                scrollTop: $("#error-container").offset().top
+            }, 1000);
+    }
+
+    hideErrors() {
+        $('#error-container').html(
+            ''
+        ).hide();
     }
 
     closeBalloonAt(element) {
@@ -84,7 +108,7 @@ class OverallViewController {
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
-    readCookie(name) {
+    readCookie(name, defaultValue = null) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -92,7 +116,7 @@ class OverallViewController {
             while (c.charAt(0) == ' ') c = c.substring(1, c.length);
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
         }
-        return null;
+        return defaultValue;
     }
 
     removeCookie(name) {
@@ -183,7 +207,7 @@ class OverallViewController {
                     doneCallback(jqXHRObject.status, jqXHRObject.responseText);
                 }
             })
-            .done(function(receivedData) {
+            .done(function(receivedData, responseAnswer, responseObject) {
                 if (appendMode) {
                     $(destinationId).append(receivedData);
                     var children = $(destinationId).children();
@@ -197,9 +221,10 @@ class OverallViewController {
 
                 self.endLoadingMode();
                 self.setDocumentDirty();
+                self.hideErrors();
 
                 if (doneCallback != null) {
-                    doneCallback(200);
+                    doneCallback(200, responseObject);
                 }
         });
     }
@@ -293,7 +318,7 @@ class DappLinkSelectorView extends SubViewController {
             $('#dapp-links-wrapper').toggle();
         });
 
-        this.setPrefix(this.overallController.readCookie('hiveDappPrefix'), false);
+        this.setPrefix(this.overallController.readCookie('hiveDappPrefix', self.dappPrefix), false);
         $('#dapp-links-wrapper li.dapp-icon').each(function(index, element){
             if ($(element).data('prefix') == self.dappPrefix) {
                 $('.dapp-icon').removeClass('active');

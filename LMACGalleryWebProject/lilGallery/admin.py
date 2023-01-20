@@ -5,6 +5,8 @@ from lilGallery.models import LILImagesModel
 
 
 class LILImageAdmin(admin.ModelAdmin):
+    search_fields = ['author', 'permlink', 'tags']
+    list_display = ('imageid', 'title', 'author', 'permlink')
     using = LILImagesModel.DJANGO_DATABASE_ID
     fieldsets = [
          ('Meta data', {'fields': ['imageid', 'author', 'permlink', 'title']}),
