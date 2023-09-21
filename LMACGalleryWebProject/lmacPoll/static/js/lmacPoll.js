@@ -6,6 +6,15 @@ class LMACPollController extends SubViewController {
         super();
     }
 
+    #reloadDelayed(delay) {
+        var self = this;
+        this.overallController.startLoadingMode();
+
+        window.setTimeout(function() {
+            self.#acquireUserVotes($('#hive-login-form > input[type="text"]').val())
+        }, delay);
+    }
+
     #setVote(author, permlink, voteValue) {
         this.#votes[author + '/' + permlink] = {
             'author': author,
@@ -17,8 +26,12 @@ class LMACPollController extends SubViewController {
     #sendVotesViaKeychain() {
         var operations = [];
         var username = $('#hive-login-form > input[type="text"]').val();
+        var self = this;
 
         for (const [authorperm, vote] of Object.entries(this.#votes)) {
+            if (vote['weight'] <= 0) {
+                continue;
+            }
             operations.push([
                 'vote',
                 {
@@ -35,9 +48,39 @@ class LMACPollController extends SubViewController {
             operations,
             'Posting',
             (response) => {
-                console.log(response);
+                self.#reloadDelayed(5000);
             }
         );
+    }
+
+    #getCurrentPollPostPermlink() {
+        var segments = window.location.pathname.split('/');
+
+        return segments[2] + '/' + segments[3];
+    }
+
+    #acquireUserVotes(username) {
+        var username = $('#hive-login-form > input[type="text"]').val();
+        var self = this;
+
+        this.overallController.sendAjaxCommandRequest(
+            '/lmac-poll-ajax-command',
+            'loadUserVotes',
+            {
+                'username': username,
+                'pollPostPermlink': self.#getCurrentPollPostPermlink(),
+            },
+            function(status, receivedData) {
+                for (let permlink in receivedData['votes']) {
+                    $('.vote-slider[data-comment-permlink="' + permlink + '"]').val(receivedData['votes'][permlink]).trigger('input');
+                }
+                self.overallController.endLoadingMode();
+            },
+            function(status, responseText) {
+                self.overallController.showError(responseText);
+            }
+        );
+
     }
 
     #initHiveLogin() {
@@ -54,7 +97,6 @@ class LMACPollController extends SubViewController {
         $('#hive-login-keychain-login-button').click(function(clickEvent){
               var username = $('#hive-login-form > input[type="text"]').val();
               keychain.requestSignBuffer(username, username + Date.now(), "Posting", (response) => {
-                  console.debug(response);
                   if (response.success === true)
                   {
                         $('#lmac-poll-hive .not-logged-in').hide();
@@ -63,6 +105,7 @@ class LMACPollController extends SubViewController {
                         $('#lmac-poll-hive .logged-in > .username').html(
                             username
                         );
+                        self.#acquireUserVotes(username);
                   }else{
                         $('#lmac-poll-hive .not-logged-in').show();
                         $('#lmac-poll-hive .logged-in').hide();
@@ -91,9 +134,31 @@ class LMACPollController extends SubViewController {
 
         var self = this;
 
+        $('input.vote-percent-display').on('input', function(changeEvent){
+            var value = parseInt($(this).val());
+            if (value < 0) {
+                value = 0;
+            }
+            if (value > 100) {
+                value = 100;
+            }
+
+            var voteSlider = $(this).parent('.card-footer').children('.vote-slider');
+
+            voteSlider.val(value);
+            $(this).parent('.card-footer').children('.vote-percent-display').first().val(value);
+
+            self.#setVote(
+                 voteSlider.data('comment-author'),
+                 voteSlider.data('comment-permlink'),
+                 value
+            );
+        });
+
+
         $('input.vote-slider').on('input', function(changeEvent){
             var sliderValue = $(this).val();
-            $(this).parent('.card-footer').children('.vote-percent-display').first().html(sliderValue);
+            $(this).parent('.card-footer').children('.vote-percent-display').first().val(sliderValue);
             self.#setVote(
                  $(this).data('comment-author'),
                  $(this).data('comment-permlink'),

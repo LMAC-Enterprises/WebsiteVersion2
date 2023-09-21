@@ -9,28 +9,35 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import mimetypes
 import os
 from pathlib import Path
 
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xxxxx'
+SECRET_KEY = 'TOP SECRET'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'lmac.gallery',
+    'www.lmac.gallery'
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,11 +46,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'staticContentApp',
     'lilGallery',
-    'lmacPoll'
+    'lmacPoll',
+    'lmacWinners',
+    'lmacAPI',
+    'lilChecker',
+    'lmacNews'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,12 +88,10 @@ WSGI_APPLICATION = 'LMACGalleryWebProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'lmacMysql': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': '',
         'USER': '',
@@ -109,6 +119,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHES = {
+   'default': {
+      'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+      'LOCATION': 'TOP SECRET',
+   }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -129,7 +146,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -141,10 +158,20 @@ STATICFILES_DIRS = [
 ]
 
 MAIN_MENU = {
-    'home': {'path': '/', 'title': 'Home'},
-    'lil-gallery': {'path': '/lil-gallery', 'title': 'LIL Gallery'},
-    'lil-gallery-tags': {'path': '/lil-gallery-tags', 'title': 'LIL Tags'},
-    'lmac-polls': {'path': '/lmac-polls', 'title': 'Polls'},
-    'lmac-winners': {'path': '/lmac-winners', 'title': 'Winners'}
+    'home': {'path': '/', 'title': 'Home', 'enabled': True},
+    'lmac-news': {'path': '/lmac-news', 'title': 'News', 'enabled': True},
+    'lil-gallery': {'path': '/lil-gallery', 'title': 'LIL Gallery', 'enabled': True},
+    'lil-gallery-tags': {'path': '/lil-gallery-tags', 'title': 'LIL Tags', 'enabled': True},
+    'lmac-polls': {'path': '/lmac-polls', 'title': 'Polls', 'enabled': True},
+    'lmac-winners': {'path': '/lmac-winners', 'title': 'Winners', 'enabled': True},
+    'lil-checker': {'path': '/lil-checker', 'title': 'LIL Checker', 'enabled': True}
 }
 
+TITLE_TEMPLATE = 'LMAC Gallery :: {addon}'
+
+LMAC_API_KEYS = {
+    'TOP SECRET': {
+        'lil': ['addBunch', 'count', 'randomPick', 'deleteBunch', 'getTags', 'getTopTags'],
+        'lmac': ['addContestOutcomes', 'getLastContestWinners']
+    }
+}

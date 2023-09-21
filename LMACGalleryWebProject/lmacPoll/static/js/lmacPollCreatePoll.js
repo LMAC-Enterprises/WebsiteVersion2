@@ -109,7 +109,7 @@ class LMACPollCreateController extends SubViewController {
                         }]
                     ]
             }), (response) => {
-          console.log(response);
+
             if (! response.success && response.error != 'user_cancel') {
                 self.overallController.showError(response.message)
                 self.overallController.endLoadingMode();

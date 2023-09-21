@@ -11,6 +11,7 @@ class StaticContentModel(models.Model):
     content_id = models.CharField(max_length=48)
     is_enabled = models.BooleanField(default=True)
     is_home_page = models.BooleanField(default=False)
+    disableTitle = models.BooleanField(default=False)
     created_date = models.DateField()
     title = models.CharField(max_length=256)
     body = models.TextField()

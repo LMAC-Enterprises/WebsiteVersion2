@@ -118,3 +118,7 @@
 .lil-gallery-form-container input[type="submit"]:hover {
     background-color: #e4f5e0;
 }
+
+.lil-alternative-search {
+    margin: 5px 0 15px 0;
+}

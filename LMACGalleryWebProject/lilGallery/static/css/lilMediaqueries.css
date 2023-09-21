@@ -1,0 +1,16 @@
+@media (max-width: 840px) {
+    .lil-gallery-form-container {
+        font-size: 1.5em;
+    }
+
+    .lil-gallery-form-container input[type="submit"] {
+        height: 50px;
+        font-size: 1em;
+    }
+
+    .lil-gallery-form-container input[type="search"] {
+        height: 50px;
+        font-size: 1em;
+        width: 50vw;
+    }
+}

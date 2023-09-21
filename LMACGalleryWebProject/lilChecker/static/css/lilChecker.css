@@ -1,0 +1,47 @@
+#lil-checker-console {
+	font-family: "Courier New";
+	font-size: 12px;
+	color: lightgreen;
+	background-color: black;
+	padding: 5px;
+	width: auto;
+	height: 300px;
+	overflow: scroll;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid #392a28;
+}
+
+#lil-checker-markdown {
+    width: 99%;
+    height: 250px;
+}
+
+.LMACLILChecker-not-found {
+	color: red;
+}
+
+.LMACLILChecker-error {
+	color: red;
+}
+
+.LMACLILChecker-console-image {
+	padding: 3px;
+	background-color: green;
+	display: inline-block;
+	margin: 0 auto;
+}
+
+#lil-checker-snippet textarea {
+    width: 99%;
+    height: 250px;
+}
+
+.lil-checker-preview-image {
+    height: 90px;
+    border: 1px solid lightgreen;
+}
+
+.lil-checker-preview {
+    border-bottom: 1px solid lightgreen;
+}

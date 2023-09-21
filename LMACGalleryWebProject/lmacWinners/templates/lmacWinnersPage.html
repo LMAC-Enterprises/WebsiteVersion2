@@ -1,0 +1,50 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lmacWinners.css' %}">
+<!-- <script type="text/javascript" src="{% static 'js/lmacWinners.js' %}"></script> -->
+<div id="lmac-winners-contest-wrapper">
+    <div class="pagination">
+        <ul>
+            <li><a href="/lmac-winners/{{ pagination.first }}" title="Round {{ pagination.first }}">&#171;</a></li>
+        {% for contestId in pagination.backward %}
+            <li><a href="/lmac-winners/{{ contestId }}" class="paginationLink" title="Round {{ contestId }}">{{ contestId }}</a></li>
+        {% endfor %}
+        <li>{{ contest.contestId }}</li>
+        {% for contestId in pagination.forward %}
+            <li><a href="/lmac-winners/{{ contestId }}" class="paginationLink" title="Round {{ contestId }}">{{ contestId }}</a></li>
+        {% endfor %}
+            <li><a href="/lmac-winners/{{ pagination.last }}" title="Round {{ pagination.last }}">&#187;</a></li>
+        </ul>
+    </div>
+    <h2>{{ contest.title }}</h2>
+    <p>Click <a href="" class="dynamic-dapp-link" data-path="{{ contest.postUrl}}">here</a> to open the winner announcement in the <a href="#" onclick="$('#dapp-link-box-toggler > a').trigger('click');">Hive dApp</a> of your choice. <br/>
+        You can also click on an image below to open it there.</p>
+    <div id="lmac-winners-winners-container">
+        <div class="winner-card">
+            <div class="card-header">Template image</div>
+            <a target="_blank" href="" class="dynamic-dapp-link" data-path="{{ contest.postUrl}}"><img src="https://images.hive.blog/300x0/{{ contest.templateImageUrl }}" /></a>
+        </div>
+        {% for winner in contest.winners %}
+        <div class="winner-card">
+            <div class="card-header">&#127912; {{ winner.artist }} &#127942; {{ winner.winningPlace }}</div>
+            <a target="_blank" href="" class="dynamic-dapp-link" data-path="{{ winner.postUrl}}"><img src="https://images.hive.blog/300x0/{{ winner.imageUrl }}" /></a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <ul>
+            <li><a href="/lmac-winners/{{ pagination.first }}" title="Round {{ pagination.first }}">&#171;</a></li>
+        {% for contestId in pagination.backward %}
+            <li><a href="/lmac-winners/{{ contestId }}" class="paginationLink" title="Round {{ contestId }}">{{ contestId }}</a></li>
+        {% endfor %}
+        <li>{{ contest.contestId }}</li>
+        {% for contestId in pagination.forward %}
+            <li><a href="/lmac-winners/{{ contestId }}" class="paginationLink" title="Round {{ contestId }}">{{ contestId }}</a></li>
+        {% endfor %}
+            <li><a href="/lmac-winners/{{ pagination.last }}" title="Round {{ pagination.last }}">&#187;</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

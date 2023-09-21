@@ -1,0 +1,27 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lmacNews.css' %}">
+<div class="lmac-news">
+    <h1>LMAC News</h1>
+    <p>Below you can find the latest {{ postCount}} posts published by LMAC.</p>
+
+    <div class="lmac-news-wrapper">
+        {% for post in posts %}
+        <div class="lmac-news-post">
+                <div class="lmac-news-post-header">
+                    <a class="dynamic-dapp-link" data-path="{{post.authorPerm}}" href="https://peakd.com/{{post.authorPerm}}" title="Open Hive post" target="_blank">{{ post.title }}</a>
+                </div>
+                <div class="lmac-news-post-body">
+                    <a class="dynamic-dapp-link" data-path="{{post.authorPerm}}" href="https://peakd.com/{{post.authorPerm}}" title="Open Hive post" target="_blank">
+                        <img src="{{ post.coverImage }}" alt="Loading error."/>
+                    </a>
+                </div>
+                <div class="lmac-news-post-footer">
+                    <span>Created {{ post.elapsed }}.</span>
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

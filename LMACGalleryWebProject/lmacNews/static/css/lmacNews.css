@@ -1,0 +1,58 @@
+.lmac-news-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.lmac-news-post {
+    flex: 1 1 calc((100% / 4) - 2rem);
+    padding: 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 2px 5px 1px rgba(51, 51, 51, 0.5);
+    min-width: 300px;
+    max-width: 50%;
+
+}
+
+.lmac-news-post > .lmac-news-post-header {
+    margin: 0;
+    padding: 5px;
+    display: block;
+    background-color: #d5e9d9;
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    font-size: 1.2em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #F5EBE0;
+}
+
+.lmac-news-post > .lmac-news-post-header > a {
+    text-decoration: none;
+    color: #392a28;
+}
+
+.lmac-news-post > .lmac-news-post-body {
+    text-align: center;
+}
+
+.lmac-news-post > .lmac-news-post-body img {
+    margin: 5px 0 5px 0;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    width: 100%;
+}
+
+.lmac-news-post > .lmac-news-post-footer {
+    padding: 5px;
+    background-color: #d5e9d9;
+    color: #392a28;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.82em;
+}

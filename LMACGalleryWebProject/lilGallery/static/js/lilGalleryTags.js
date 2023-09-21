@@ -24,7 +24,7 @@ class LILGalleryTagsController extends SubViewController {
                 );
             });
 
-            window.location.href = '/lil-gallery/' + tags.join(' ') + '?mode=mix';
+            window.location.href = '/lil-gallery/' + tags.join(',') + '?mode=mix';
         });
 
         $('.lil-gallery-selectable-tag a').click(function(clickEvent){

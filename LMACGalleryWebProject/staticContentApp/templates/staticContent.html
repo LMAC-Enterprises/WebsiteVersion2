@@ -1,7 +1,9 @@
 {% extends "overall.html" %}
 {% block content %}
 <div class="staticContent">
+    {% if not content.disableTitle %}
     <h1>{{content.title}}</h1>
+    {% endif %}
     {{content.bodyRendered|safe}}
 </div>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<div id="error-not-found-wrapper">
+    <h1>Error</h1>
+    <p>{% if exception == "Resolver404" %}Page not found.{% else %}{{ exception }}{% endif %} Are you sure you didn't make a typo?</p>
+    <a href="/home">Go to the homepage.</a>
+    <div class="error-404-image-wrapper"><img src="{% static 'images/404.png' %}" /></div>
+</div>
+{% endblock %}

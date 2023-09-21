@@ -5,16 +5,25 @@
     }
 }
 
-@media (max-width: 799px) {
+@media (max-width: 1000px) {
     .mobile-menu {
         display: block;
     }
     .desktop-menu {
         display: none;
     }
+
+    a.link-button,
+    .action-button {
+        font-size: 1.5em;
+    }
+
+    .content-wrapper.error-container {
+        font-size: 2em;
+    }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
     .mobile-menu-items.active,
     .mobile-menu {
         display: none;

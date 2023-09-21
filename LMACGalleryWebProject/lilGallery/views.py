@@ -1,3 +1,8 @@
+"""
+Views.
+By quantumg.
+"""
+
 import json
 
 from django.contrib import auth
@@ -5,11 +10,20 @@ from django.http import HttpRequest, HttpResponse, HttpResponseNotFound, JsonRes
 from django.shortcuts import render
 
 # Create your views here.
-from LMACGalleryWebProject.core.MainMenu import mainMenuHelper
+from LMACGalleryWebProject.core.generalSiteTools import pageTitleHelper, mainMenuHelper
 from lilGallery.models import LILImagesModel, LILRatingsModel, LILTagsModel
 
 
 def lilGalleryMainAppView(request: HttpRequest, searchTerms: str = '', page: int = 1):
+    """
+    Lil gallery main app view.
+    
+    :param request: (HttpRequest) Request.
+    :param searchTerms: (str = '') Search terms.
+    :param page: (int = 1) Page.
+
+    :return: No return.
+    """
     if page < 1:
         page = 1
 
@@ -18,14 +32,23 @@ def lilGalleryMainAppView(request: HttpRequest, searchTerms: str = '', page: int
         andMode = False
 
     errorMessage = ''
-    images, amountOfImages = LILImagesModel.loadImages(searchTerms, page, andMode)
-    if len(images) == 0:
-        errorMessage = 'Sorry, couldn\'t find any images matching your search query.'
+
+    sanitizedSearchTerms = searchTerms.strip().lower();
+
+    if sanitizedSearchTerms == 'random-pick':
+        images, amountOfImages = LILImagesModel.loadRandomPick()
+    elif sanitizedSearchTerms == 'last-hundred':
+        images, amountOfImages = LILImagesModel.loadLastHundred(page)
+    else:
+        images, amountOfImages = LILImagesModel.loadImages(searchTerms, page, andMode)
+        if len(images) == 0:
+            errorMessage = 'Sorry, couldn\'t find any images matching your search query.'
 
     return render(request, 'lilGalleryMain.html', {
         'overall': {
             'mainMenu': mainMenuHelper('lil-gallery'),
-            'errorMessage': errorMessage
+            'errorMessage': errorMessage,
+            'title': pageTitleHelper('LIL')
         },
         'searchTerms': ' '.join(LILImagesModel.parseSearchTerms(searchTerms, 5)),
         'content': {
@@ -38,11 +61,20 @@ def lilGalleryMainAppView(request: HttpRequest, searchTerms: str = '', page: int
 
 
 def lilGalleryAjaxAppView(request: HttpRequest):
+    """
+    Lil gallery ajax app view.
+    
+    :param request: (HttpRequest) Request.
+
+    :return: No return.
+    """
     if request.method != 'POST':
         return HttpResponse(status=405, content='Error. Forbidden request.')
 
     page = int(request.POST['data[page]'])
     searchTerms = request.POST['data[searchTerms]']
+    if searchTerms.startswith('@'):
+        searchTerms = searchTerms[1:]
 
     if page < 1:
         page = 1
@@ -69,9 +101,17 @@ def lilGalleryAjaxAppView(request: HttpRequest):
 
 
 def lilGalleryImageMainAppView(request: HttpRequest, imageId: int = 0):
+    """
+    Lil gallery image main app view.
+    
+    :param request: (HttpRequest) Request.
+    :param imageId: (int = 0) Image id.
+
+    :return: No return.
+    """
     image = LILImagesModel.loadImageById(imageId)
     if image is None:
-        return HttpResponseNotFound("hello")
+        return HttpResponseNotFound("Not found.")
 
     return render(
         request,
@@ -79,7 +119,8 @@ def lilGalleryImageMainAppView(request: HttpRequest, imageId: int = 0):
         {
             'overall': {
                 'mainMenu': mainMenuHelper('lil-gallery'),
-                'errorMessage': ''
+                'errorMessage': '',
+                'title': pageTitleHelper('Image')
             },
             'image': image
         }
@@ -87,6 +128,13 @@ def lilGalleryImageMainAppView(request: HttpRequest, imageId: int = 0):
 
 
 def lilGalleryImageAjaxAppView(request: HttpRequest):
+    """
+    Lil gallery image ajax app view.
+    
+    :param request: (HttpRequest) Request.
+
+    :return: No return.
+    """
     if request.method != 'POST':
         return HttpResponse(status=405, content='Error. Forbidden request.')
 
@@ -106,6 +154,14 @@ def lilGalleryImageAjaxAppView(request: HttpRequest):
 
 
 def _lilGalleryAjaxCommand_doFiveStarVote(arguments: dict, user) -> dict:
+    """
+    _lil gallery ajax command_do five star vote.
+    
+    :param arguments: (dict) Arguments.
+    :param user: User.
+
+    :return: Returns a dict.
+    """
     print(user)
 
     if not user.has_perm("blog.rate_image"):
@@ -133,6 +189,13 @@ def _lilGalleryAjaxCommand_doFiveStarVote(arguments: dict, user) -> dict:
 
 
 def lilGalleryAjaxCommand(request: HttpRequest):
+    """
+    Lil gallery ajax command.
+    
+    :param request: (HttpRequest) Request.
+
+    :return: No return.
+    """
     if not request.method == "POST":
         return JsonResponse(
             {
@@ -160,11 +223,20 @@ def lilGalleryAjaxCommand(request: HttpRequest):
 
 
 def lilGalleryTagsView(request: HttpRequest, allTags=False):
+    """
+    Lil gallery tags view.
+    
+    :param request: (HttpRequest) Request.
+    :param allTags=False: All tags= false.
+
+    :return: No return.
+    """
 
     return render(request, 'lilGalleryTags.html', {
         'overall': {
             'mainMenu': mainMenuHelper('lil-gallery-tags'),
-            'errorMessage': ''
+            'errorMessage': '',
+            'title': pageTitleHelper('Tags')
         },
         'topTags': LILTagsModel.loadTopTags(),
         'allTags': LILTagsModel.loadAllTags()
@@ -172,5 +244,12 @@ def lilGalleryTagsView(request: HttpRequest, allTags=False):
 
 
 def lilGalleryAllTagsView(request: HttpRequest):
+    """
+    Lil gallery all tags view.
+    
+    :param request: (HttpRequest) Request.
+
+    :return: No return.
+    """
     return lilGalleryTagsView(request, True)
 

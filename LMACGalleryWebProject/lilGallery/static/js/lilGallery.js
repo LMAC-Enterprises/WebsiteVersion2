@@ -124,9 +124,16 @@ class LILGalleryController extends SubViewController {
                     'imageId': $(this).data('image-id')
                 }
             );
+            window.history.replaceState({ 'origin-path': window.location.pathname}, 'Image', '/lil-gallery-image/' + $(this).data('image-id'));
             return false;
         });
+
+
+        $('#modal-wrapper .close-button').click(function(clickEvent) {
+            window.history.replaceState({},  'LIL', window.history.state['origin-path']);
+        });
     }
+
 
     #initDownloadImageHandling() {
         var self = this;

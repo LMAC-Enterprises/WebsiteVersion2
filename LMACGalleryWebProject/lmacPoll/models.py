@@ -1,52 +1,66 @@
+"""
+Models.
+By quantumg.
+"""
+
 import datetime
 import json
 import re
 from typing import Optional
 from urllib.parse import urlparse
 
-from beem.comment import Comment
-from beem.exceptions import OfflineHasNoRPCException
 from django.core.cache import cache
 from django.db import models
-from beem.discussions import Query, Discussions, Discussions_by_created
-
 
 # Create your models here.
+from LMACGalleryWebProject.core.hiveNetwork import HiveCommentRequest, HiveDiscussionsByCreatedRequest
+
+
 class LMACPollModel:
+    """
+    L m a c poll model.
+    """
     LIMIT_POLL_SEARCH_TO_USERS = ['lmac', 'shaka', 'quantumg', 'agmoore', 'mballesteros']
     CACHE_TIME_IN_SECONDS = 3600
 
     @staticmethod
     def loadPolls() -> Optional[list]:
+        """
+        Load polls.
+        
+
+        :return: Optional of "list".
+        """
 
         cached = cache.get('lmac_polls')
         if cached is not None:
             return cached
 
-        query = Query(limit=51, tag="lmacpoll")
-
         dateTimeNow = datetime.datetime.now(datetime.timezone.utc)
         polls = []
-        try:
-            for comment in Discussions_by_created(query):
 
-                if comment.author not in LMACPollModel.LIMIT_POLL_SEARCH_TO_USERS:
-                    continue
-
-                endsIn = 'Poll is closed!'
-                hours = int((dateTimeNow - comment['created']).total_seconds() / 3600)
-                if hours <= 24:
-                    endsIn = "Ends in %s hours." % hours
-
-                polls.append(
-                    {
-                        'title': comment.title,
-                        'authorperm': comment.authorperm,
-                        'endsIn': endsIn
-                    }
-                )
-        except OfflineHasNoRPCException:
+        discussionsRequest = HiveDiscussionsByCreatedRequest('lmacpoll')
+        discussions = discussionsRequest.submit()
+        if discussions is None:
             return None
+
+        for comment in discussions:
+
+            if comment.author not in LMACPollModel.LIMIT_POLL_SEARCH_TO_USERS:
+                continue
+
+            endsIn = 'Poll is closed!'
+            hours = int((dateTimeNow - comment.created).total_seconds() / 3600)
+            if hours <= 24:
+                endsIn = "Ends in %s hours." % hours
+
+            polls.append(
+                {
+                    'title': comment.title,
+                    'authorperm': comment.authorPerm,
+                    'endsIn': endsIn
+                }
+            )
 
         cache.set('lmac_polls', polls,  LMACPollModel.CACHE_TIME_IN_SECONDS)
 
@@ -54,15 +68,22 @@ class LMACPollModel:
 
     @staticmethod
     def loadPoll(authorperm: str) -> Optional[dict]:
+        """
+        Load poll.
+        
+        :param authorperm: (str) Authorperm.
+
+        :return: Optional of "dict".
+        """
 
         sid = 'lmac_poll_' + authorperm
         cached = cache.get(sid)
         if cached is not None:
             return cached
 
-        try:
-            comment = Comment(authorperm)
-        except OfflineHasNoRPCException:
+        request = HiveCommentRequest(authorperm)
+        comment = request.submit()
+        if comment is None:
             return None
 
         poll = {
@@ -76,6 +97,13 @@ class LMACPollModel:
 
     @staticmethod
     def _parseOptions(comment) -> Optional[list]:
+        """
+        _parse options.
+        
+        :param comment: Comment.
+
+        :return: Optional of "list".
+        """
 
         matches = re.finditer(
             r"(@[a-zA-Z0-9\.\-]+): \[-> Original post\]\((https\:\/\/.*)\)\s+\!\[\]\((https\:\/\/.*)\)",
@@ -97,32 +125,59 @@ class LMACPollModel:
                 'commentPermlinkReference': ''
             }
 
-        for subComment in comment.get_replies(raw_data=False):
-            if subComment['author'] != comment['author']:
+        for subComment in comment.getReplies():
+            if subComment.author != comment.author:
                 continue
-            authorReference = subComment['body'].strip()
+            authorReference = subComment.body.strip()
             if authorReference in options.keys():
-                rewards = 0.0
-                if "pending_payout_value" in subComment:
-                    rewards += subComment["pending_payout_value"].amount if not isinstance(subComment["pending_payout_value"], str) else float(subComment["pending_payout_value"].split(' ')[0])
-                if "curator_payout_value" in subComment:
-                    rewards += subComment["curator_payout_value"].amount if not isinstance(subComment["curator_payout_value"], str) else float(subComment["curator_payout_value"].split(' ')[0])
-                if "author_payout_value" in subComment:
-                    rewards += subComment["author_payout_value"].amount if not isinstance(subComment["author_payout_value"], str) else float(subComment["author_payout_value"].split(' ')[0])
-
-                options[authorReference]['votes'] = len(subComment.get_votes(raw_data=True))
-                options[authorReference]['rewards'] = rewards
-                options[authorReference]['commentAuthorReference'] = subComment['author']
-                options[authorReference]['commentPermlinkReference'] = subComment['permlink']
+                options[authorReference]['votes'] = len(subComment.votes)
+                options[authorReference]['rewards'] = subComment.rewards
+                options[authorReference]['commentAuthorReference'] = subComment.author
+                options[authorReference]['commentPermlinkReference'] = subComment.permlink
 
         return list(options.values())
 
     @staticmethod
     def loadUserVotes(username: str) -> dict:
+        """
+        Load user votes.
+        
+        :param username: (str) Username.
+
+        :return: Returns a dict.
+        """
         pass
+
+    @staticmethod
+    def loadPollForUser(username: str, pollPostAuthorPerm: str) -> Optional[dict]:
+        """
+        Load poll for user.
+        
+        :param username: (str) Username.
+        :param pollPostAuthorPerm: (str) Poll post author perm.
+
+        :return: Optional of "dict".
+        """
+
+        request = HiveCommentRequest(pollPostAuthorPerm)
+        comment = request.submit()
+        if comment is None:
+            return None
+
+        votes = {}
+        for reply in comment.getReplies():
+            for activeVote in reply.votes:
+                if username == activeVote['voter']:
+                    percent = int(activeVote['percent'])
+                    votes[reply.permlink] = percent / 100 if percent > 0 else 0
+
+        return votes
 
 
 class LMACPollPostTemplateModel(models.Model):
+    """
+    TODO: Needs description!
+    """
     class Meta:
         db_table = 'poll_post_template'
         verbose_name = 'Poll Post Template'
@@ -143,6 +198,12 @@ class LMACPollPostTemplateModel(models.Model):
 
     @staticmethod
     def loadTemplates():
+        """
+        Load templates.
+        
+
+        :return: No return.
+        """
 
         templates = LMACPollPostTemplateModel.objects.all()
 
@@ -172,6 +233,18 @@ class LMACPollPostTemplateModel(models.Model):
 
     @staticmethod
     def saveTemplate(name: str, title: str, body: str, tags: list, category: str, beneficiaries: list):
+        """
+        Save template.
+        
+        :param name: (str) Name.
+        :param title: (str) Title.
+        :param body: (str) Body.
+        :param tags: (list) Tags.
+        :param category: (str) Category.
+        :param beneficiaries: (list) Beneficiaries.
+
+        :return: No return.
+        """
         LMACPollPostTemplateModel.objects.update_or_create(
             name=name,
             defaults={
@@ -185,4 +258,11 @@ class LMACPollPostTemplateModel(models.Model):
 
     @staticmethod
     def deleteTemplate(name):
+        """
+        Delete template.
+        
+        :param name: Name.
+
+        :return: No return.
+        """
         LMACPollPostTemplateModel.objects.delete(name=name)

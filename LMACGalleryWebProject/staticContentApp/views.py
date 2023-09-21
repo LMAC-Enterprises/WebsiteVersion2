@@ -1,8 +1,8 @@
-import pycmarkgfm
+import mistletoe
 from django.shortcuts import render
-from django.http import JsonResponse, HttpRequest, HttpResponse, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponseNotFound
 
-from LMACGalleryWebProject.core.MainMenu import mainMenuHelper
+from LMACGalleryWebProject.core.generalSiteTools import pageTitleHelper, mainMenuHelper
 from staticContentApp.models import StaticContentModel
 
 
@@ -21,13 +21,14 @@ def staticContentAppViewRouter(request: HttpRequest, contentId: str = 'home'):
     return render(request, 'staticContent.html', {
         'overall': {
             'mainMenu': mainMenuHelper(contentId),
-            'errorMessage': ''
+            'errorMessage': '',
+            'title': pageTitleHelper(content.title)
         },
         'content': {
             'title': content.title,
-            'bodyRendered': pycmarkgfm.gfm_to_html(content.body),
+            'bodyRendered': mistletoe.markdown(content.body),
             'created': content.created_date,
-            'contentId': content.content_id
+            'contentId': content.content_id,
+            'disableTitle': content.disableTitle
         }
     })
-

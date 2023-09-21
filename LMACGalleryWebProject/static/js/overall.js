@@ -37,6 +37,7 @@ class OverallViewController {
             self.initBurgerMenu();
             self.initModal();
             self.initTabs();
+            self.initCollapsibleFieldsets();
 
             for (const subViewController of self.subViewControllers) {
                 subViewController.init(self);
@@ -158,6 +159,12 @@ class OverallViewController {
         });
     }
 
+    initCollapsibleFieldsets() {
+        $('fieldset.collapsible > legend').on('click', function() {
+            $(this).parent().toggleClass('collapsed');
+        });
+    }
+
     initBurgerMenu() {
         $('#burger-menu-button').on('click', this.onBurgerMenuButtonClicked);
     }
@@ -229,7 +236,6 @@ class OverallViewController {
         });
     }
 
-
     loadInModal(path, parameters) {
        this.loadHtmlInto(
            path,
@@ -287,7 +293,17 @@ class DappLinkSelectorView extends SubViewController {
     updateDappLinks() {
         var self = this;
         $('.dynamic-dapp-link').each(function(element, index) {
-            $(this).attr('href', self.dappPrefix + $(this).data('path'));
+            var path = $(this).data('path');
+            if (path.startsWith('https://')) {
+                var relativePath = new URL('', path).pathname;
+                if (relativePath.startsWith('/')) {
+                    relativePath = relativePath.substring(1);
+                }
+                path = relativePath;
+            }
+
+
+            $(this).attr('href', self.dappPrefix + path);
         });
     }
 

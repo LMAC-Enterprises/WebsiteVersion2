@@ -15,7 +15,7 @@
         </div>
         <div class="logged-in" style="display: none;">
             Logged in as @<span class="username">unknown</span>. <a href="#" class="logout">Logout</a>.<br/>
-            <button id="hive-login-keychain-send-button" type="button" value="keychain">Send votes via Keychain</button>
+            <button id="hive-login-keychain-send-button" type="button" value="keychain">Send votes now</button>
         </div>
     </div>
     <h1>{{poll.title}}</h1>
@@ -36,9 +36,9 @@
                 <img src="https://images.hive.blog/320x0/{{option.image}}" data-url="{{option.image}}" />
             </div>
             <div class="card-footer">
-                <span class="vote-label vote-percent-display">0</span>
-                <input class="vote-slider" type="range" min="0" max="100" step="1" value="0" data-comment-permlink="{{option.commentPermlinkReference}}" data-comment-author="{{option.commentAuthorReference}}"/>
-                <span class="vote-label">100</span>
+                    <input class="vote-label vote-percent-display" type="text" value="0"/>
+                    <input class="vote-slider" type="range" min="0" max="100" step="1" value="0" data-comment-permlink="{{option.commentPermlinkReference}}" data-comment-author="{{option.commentAuthorReference}}"/>
+                    <span class="vote-label">100</span>
             </div>
         </div>
         {% endfor %}

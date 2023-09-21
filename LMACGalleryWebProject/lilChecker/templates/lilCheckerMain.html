@@ -1,0 +1,56 @@
+{% extends "overall.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/lilChecker.css' %}">
+<script type="application/javascript" src="{% static 'js/lilChecker.js' %}"></script>
+<div>
+    <h2>LIL Checker</h2>
+    <p>Paste the Markdown of your Hive post into the text box below and check if the LIL Index Bot would be able to find the images in it.</p>
+    <textarea id="lil-checker-markdown" placeholder="What you see here is just a placeholder!
+Please paste your fancy LIL Hive post markup into this field.
+
+&lt;table class=&quot;lil&quot;&gt;
+	&lt;tr&gt;
+		&lt;td class=&quot;lil-title&quot;&gt;Night butterfly&lt;/td&gt;
+		&lt;td class=&quot;lil-tags&quot;&gt;butterfly,  moth, caligo, insect, flying insect, lepidoptera&lt;/td&gt;
+		&lt;td class=&quot;lil-image&quot;&gt;&lt;img src=&quot;https://images.hive.blog/DQmTM1LmiiMFy8mDdFdF94iEcaFyfuaiGXw3qHHAAFMq18K/IMG_20201008_135625.jpg&quot; width=&quot;500&quot;/&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td class=&quot;lil-title&quot;&gt;Praying mantis&lt;/td&gt;
+		&lt;td class=&quot;lil-tags&quot;&gt;mantis, insect, mantidae&lt;/td&gt;
+		&lt;td class=&quot;lil-image&quot;&gt;&lt;img src=&quot;https://images.hive.blog/DQmZCP8jksFqVuztMb84yL6KqDYTC8aJowM7LkHTpdvXpa2/IMG_20201109_113230.jpg&quot; width=&quot;500&quot;/&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+
+Another fantastic text here!"></textarea>
+    <button id="lil-checker-submit-to-check" class="action-button">Check</button>
+</div>
+<div id="lil-checker-snippet">
+    <fieldset class="collapsible collapsed">
+        <legend>LIL contribution template (click here to expand)<span class="collapse-indicator"></span></legend>
+        <div class="fieldset-content">
+            <textarea readonly="readonly" id="lil-checker-snippet">&lt;table class=&quot;lil&quot;&gt;
+    &lt;tr&gt;
+        &lt;td class=&quot;lil-title&quot;&gt;YOUR TITLE HERE&lt;/td&gt;
+        &lt;td class=&quot;lil-tags&quot;&gt;YOUR COMMA SEPARATED KEYWORDS HERE&lt;/td&gt;
+        &lt;td class=&quot;lil-image&quot;&gt;&lt;img src=&quot;YOUR IMAGE URL HERE&quot; width=&quot;500&quot;/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td class=&quot;lil-title&quot;&gt;YOUR TITLE HERE&lt;/td&gt;
+        &lt;td class=&quot;lil-tags&quot;&gt;YOUR COMMA SEPARATED KEYWORDS HERE&lt;/td&gt;
+        &lt;td class=&quot;lil-image&quot;&gt;&lt;img src=&quot;YOUR IMAGE URL HERE&quot; width=&quot;500&quot;/&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+            </textarea>
+            <div id="lil-snippet-copy-indicator">
+
+            </div>
+            <button id="lil-snippet-copy-button" class="action-button">Copy to clipboard</button>
+        </div>
+    </fieldset>
+</div>
+<div id="lil-checker-console">
+    <p>$ Ready for checking your markdown!</p>
+</div>
+<em>This is what the LIL Index bot will see when it looks into your post.</em>
+{% endblock %}
